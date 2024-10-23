@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +10,10 @@ public class Gui extends JFrame implements ActionListener {
     JButton changeColorbutton;
     JButton changeSymbolsButton;
     JPanel CPanel;
+    JPanel SPanel;
 
     Gui() {
-
+// AAAA
         this.setTitle("TicTacTo");
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
@@ -20,8 +22,9 @@ public class Gui extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel north_panel = new JPanel();
-        north_panel.setLayout(new GridLayout(2, 3, 2, 1)); // Justerat layout för att rymma fler knappar
+        north_panel.setLayout(new GridLayout(6, 1, 50, 20)); // Justerat layout för att rymma fler knappar
         north_panel.setBorder(new LineBorder(Color.BLUE, 5));
+
 
         changeSymbolsButton = new JButton("Välj Figurere");
         changeSymbolsButton.addActionListener(this);
@@ -49,11 +52,23 @@ public class Gui extends JFrame implements ActionListener {
         north_panel.add(btn6);
 
         CPanel = new JPanel();
+        SPanel = new JPanel();
+
+        TitledBorder north_panelTitle = BorderFactory.createTitledBorder("Main meny");
+        TitledBorder CPanelTitle = BorderFactory.createTitledBorder("Färger");
+        TitledBorder SpanelTitle = BorderFactory.createTitledBorder("Figurer");
+
+        CPanel.setBorder(CPanelTitle);
+        SPanel.setBorder(SpanelTitle);
+        north_panel.setBorder(north_panelTitle);
 
         this.add(north_panel, BorderLayout.NORTH);
         this.add(CPanel, BorderLayout.CENTER);
+        this.add(SPanel, BorderLayout.SOUTH);
         this.setVisible(true);
     }
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
