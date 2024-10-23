@@ -1,32 +1,21 @@
-/*public class Player implements PlayerInterface, SymbolChooser {
-    private String name;
-    private String symbol;
+import javax.swing.*;
 
-    public Player(String name, String symbol) {
-        this.name = name;
-        this.symbol = symbol;
-    }
-    @Override
-    public String getName() {
-        return name;
+public class Player {
+    private final String symbol;
+    private MoveValidator moveValidator;
+
+    public Player(String symbol, MoveValidator moveValidator) {
+        this.symbol = symbol;  // Till exempel, "X" eller "O"
+        this.moveValidator = moveValidator;  // Spelaren använder MoveValidator för att göra drag
     }
 
-    @Override
+    // Utför spelarens drag med hjälp av MoveValidator
+    public boolean makeMove(String[][] board, int row, int col, JButton[][] buttons) {
+        return moveValidator.makeMove(board, row, col, symbol, buttons);
+    }
+
+    // Returnerar spelarens symbol
     public String getSymbol() {
         return symbol;
     }
-
-    @Override
-    public void makeMove(GameBoard3x3 board, int position) {
-        int size = board.getSize();
-        int row = position / size;   // Beräknar vilken rad
-        int col = position % size;   // Beräknar vilken kolumn
-        board.updateBoard(row, col, symbol);  // Använder uppdaterad metod för 2D-array
-    }
-
-    @Override
-    public void chooseSymbol(String symbol) {
-        this.symbol = symbol;
-    }
 }
-*/

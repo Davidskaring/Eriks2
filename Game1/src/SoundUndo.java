@@ -7,7 +7,7 @@ public class SoundUndo implements IAudioManager{
     public void playSound() {
         try {
             // Hitta ljudfilen i resursmappen
-            URL soundURL = getClass().getResource("resources/Test.wav");
+            URL soundURL = getClass().getResource("/resources/perfect-fart.wav");
             if (soundURL == null) {
                 return;
             }
