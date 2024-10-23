@@ -7,33 +7,15 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
     private String[][] board;
     private final int SIZE = 3;  // Storleken på brädet är alltid 3x3
     private JButton[][] buttons;
-    private JButton undoButton;  // Knapp för att ångra drag
-    private Player playerX, playerO;  // Två spelare
-    private Player currentPlayer;  // Spårar vilken spelare som är aktuell
-    private MoveValidator moveValidator;
-    private UndoManager undoManager; // Instans av UndoManager
-    private IAudioManager soundUndo;
 
     public GameBoard3x3() {
         this.setTitle("Tic Tac Toe - 3 i rad");
-        this.setSize(400, 500);
+        this.setSize(400, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new BorderLayout()); // Använder BorderLayout för att separera kontrollpanelen från spelbrädet
-
-        JPanel gamePanel = new JPanel(new GridLayout(SIZE, SIZE)); // Skapar ett panel för 3x3 spelrutnätet
-        JPanel controlPanel = new JPanel(); // Skapar en panel för kontrollknappar
-        controlPanel.setLayout(new FlowLayout());
+        this.setLayout(new GridLayout(SIZE, SIZE)); // Skapar ett 3x3-rutnät för knappar
 
         buttons = new JButton[SIZE][SIZE];
         boardSize(); // Initierar brädet
-
-        moveValidator = new MoveValidator();  // Skapar en instans av MoveValidator
-        undoManager = new UndoManager(); // Skapar en instans av UndoManager
-
-        // Skapa spelare, varje spelare använder samma MoveValidator
-        playerX = new Player("X", moveValidator);
-        playerO = new Player("O", moveValidator);
-        currentPlayer = playerX;  // Spelare X börjar
 
         // Initierar knapparna och lägger till ActionListeners
         for (int row = 0; row < SIZE; row++) {
@@ -45,42 +27,17 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
                 buttons[row][col].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (moveValidator.makeMove(board, r, c, currentPlayer.getSymbol(), buttons)) {
-                            // Spara draget i UndoManager
-                            undoManager.addMove(r, c, currentPlayer.getSymbol());
-                            // Växla spelare efter ett giltigt drag
-                            currentPlayer = (currentPlayer == playerX) ? playerO : playerX;
+                        if (board[r][c].equals(" ")) {
+                            updateBoard(r, c, "X");  // Exempel: placera "X" på brädet
+                            buttons[r][c].setText("X");  // Uppdatera knappens text
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Ogiltigt drag, välj en tom plats!");
                         }
                     }
                 });
-                gamePanel.add(buttons[row][col]); // Lägger till knappen i spelpanelen
+                this.add(buttons[row][col]); // Lägger till knappen i GUI
             }
         }
-
-        // Skapa och lägg till ångra-knappen
-        undoButton = new JButton("Undo");
-        //Skapa och lägg till ångra ljud
-        soundUndo = new SoundUndo();
-        undoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (undoManager.hasMoves()) {
-                    int[] lastMove = undoManager.undoMove();
-                    if (lastMove != null) {
-                        resetMove(lastMove[0], lastMove[1]);
-                        // Växla tillbaka spelaren eftersom draget ångras
-                        currentPlayer = (currentPlayer == playerX) ? playerO : playerX;
-                        soundUndo.playSound();
-                    }
-                }
-
-            }
-        });
-
-        controlPanel.add(undoButton); // Lägger till ångra-knappen i kontrollpanelen
-
-        this.add(gamePanel, BorderLayout.CENTER); // Lägger till spelpanelen i mitten
-        this.add(controlPanel, BorderLayout.SOUTH); // Lägger till kontrollpanelen längst ned
 
         this.setVisible(true);
     }
@@ -96,15 +53,18 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
         }
     }
 
+    // Uppdaterar brädet med spelarens symbol på en specifik rad och kolumn
     public void updateBoard(int row, int col, String symbol) {
         board[row][col] = symbol;
     }
 
+    // Återställer en specifik plats på brädet (sätter den till tom)
     public void resetMove(int row, int col) {
         board[row][col] = " ";
         buttons[row][col].setText(" "); // Återställer även knappen i GUI
     }
 
+    // Returnerar den aktuella spelbrädet som en 2D-array
     public String[][] getBoard() {
         return board;
     }
@@ -112,4 +72,5 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
     public int getBoardSize() {
         return SIZE;
     }
+
 }
