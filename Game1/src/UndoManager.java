@@ -34,4 +34,3 @@ public class UndoManager {
         return !moveHistory.isEmpty();
     }
 }
-
