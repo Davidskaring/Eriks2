@@ -1,19 +1,19 @@
 import javax.swing.*;
-
 public class MoveValidator {
-    public boolean makeMove(String[] board, int position, String player) {
-        // Kontrollera om positionen är giltig (tom)
-        if (board[position].equals(" ")) {
-            // Giltigt drag, uppdatera brädet med spelarens symbol (t.ex. "X" eller "O")
-            board[position] = player;
-            return true;
+
+    public boolean makeMove(String[][] board, int row, int col, String symbol, JButton[][] buttons) {
+        if (board[row][col].equals(" ")) {
+            // Om platsen är tom, uppdatera brädet och knappen
+            board[row][col] = symbol;
+            buttons[row][col].setText(symbol);
+            return true;  // Draget är giltigt och genomfört
         } else {
-            JOptionPane.showMessageDialog(null, "Ogiltigt drag! Försök igen.", "Fel", JOptionPane.ERROR_MESSAGE);
+            // Ogiltigt drag
+            JOptionPane.showMessageDialog(null, "Ogiltigt drag, välj en tom plats!");
             return false;
         }
     }
 
     public void makeMove() {
-
     }
 }

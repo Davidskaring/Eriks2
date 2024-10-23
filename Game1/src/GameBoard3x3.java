@@ -7,6 +7,9 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
     private String[][] board;
     private final int SIZE = 3;  // Storleken på brädet är alltid 3x3
     private JButton[][] buttons;
+    private Player playerX, playerO;  // Två spelare
+    private Player currentPlayer;  // Spårar vilken spelare som är aktuell
+    private MoveValidator moveValidator;
 
     public GameBoard3x3() {
         this.setTitle("Tic Tac Toe - 3 i rad");
@@ -16,6 +19,13 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
 
         buttons = new JButton[SIZE][SIZE];
         boardSize(); // Initierar brädet
+
+        moveValidator = new MoveValidator();  // Skapar en instans av MoveValidator
+
+        // Skapa spelare, varje spelare använder samma MoveValidator
+        playerX = new Player("X", moveValidator);
+        playerO = new Player("O", moveValidator);
+        currentPlayer = playerX;  // Spelare X börjar
 
         // Initierar knapparna och lägger till ActionListeners
         for (int row = 0; row < SIZE; row++) {
@@ -27,11 +37,10 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
                 buttons[row][col].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (board[r][c].equals(" ")) {
-                            updateBoard(r, c, "X");  // Exempel: placera "X" på brädet
-                            buttons[r][c].setText("X");  // Uppdatera knappens text
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Ogiltigt drag, välj en tom plats!");
+                        // Använd currentPlayer för att göra draget med MoveValidator
+                        if (currentPlayer.makeMove(board, r, c, buttons)) {
+                            // Växla spelare efter ett giltigt drag
+                            currentPlayer = (currentPlayer == playerX) ? playerO : playerX;
                         }
                     }
                 });
