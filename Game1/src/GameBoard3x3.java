@@ -12,6 +12,7 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
     private Player currentPlayer;  // Spårar vilken spelare som är aktuell
     private MoveValidator moveValidator;
     private UndoManager undoManager; // Instans av UndoManager
+    private IAudioManager soundUndo;
 
     public GameBoard3x3() {
         this.setTitle("Tic Tac Toe - 3 i rad");
@@ -58,6 +59,9 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
 
         // Skapa och lägg till ångra-knappen
         undoButton = new JButton("Undo");
+        //Skapa upp ett ljud för Undo knappen
+        soundUndo = new SoundUndo();
+
         undoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +71,7 @@ public class GameBoard3x3 extends JFrame implements IGameBoard {
                         resetMove(lastMove[0], lastMove[1]);
                         // Växla tillbaka spelaren eftersom draget ångras
                         currentPlayer = (currentPlayer == playerX) ? playerO : playerX;
+                        soundUndo.playSound();
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Du kan endast ångra ett drag en gång!");
